@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>도장 현장작업</title>
 
-  <link rel="manifest" href="./manifest.json?v=2">
-  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png?v=2">
-  <link rel="apple-touch-icon" href="./icon-512.png?v=2">
+  <link rel="manifest" href="./manifest.json?v=4">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png?v=4">
+  <link rel="apple-touch-icon" href="./icon-512.png?v=4">
 
   <meta name="theme-color" content="#174a7c">
   <meta name="mobile-web-app-capable" content="yes">
@@ -291,7 +291,7 @@
 <body>
   <header>
     <div class="header-title">
-      <img src="./icon-192.png?v=2" alt="">
+      <img src="./icon-192.png?v=4" alt="">
       <span>도장 현장작업</span>
     </div>
     <div class="header-sub">현장 입력 전용 · 도장 체크시트 PWA</div>
@@ -299,29 +299,34 @@
 
   <main id="appRoot">
     <div class="card">
-      <h2>날씨 / 이슬점</h2>
+      <h2>환경조건 / 이슬점</h2>
       <div id="weatherStatus" class="muted">날씨 조회 중...</div>
 
       <div class="weather-grid">
         <div class="weather-item">
-          <div class="weather-title">외부온도</div>
+          <div class="weather-title">대기온도</div>
           <div class="weather-value"><span id="externalTemp">-</span>℃</div>
         </div>
         <div class="weather-item">
-          <div class="weather-title">외부습도</div>
+          <div class="weather-title">상대습도</div>
           <div class="weather-value"><span id="externalHumidity">-</span>%</div>
         </div>
         <div class="weather-item">
-          <div class="weather-title">이슬점</div>
+          <div class="weather-title">이슬점온도</div>
           <div class="weather-value"><span id="dewPoint">-</span>℃</div>
         </div>
         <div class="weather-item">
-          <div class="weather-title">온도차</div>
+          <div class="weather-title">이슬점차이</div>
           <div class="weather-value"><span id="tempDiff">-</span>℃</div>
         </div>
       </div>
 
-      <div id="envJudgeBox" class="status warn">환경판정 대기</div>
+      <label>피도물 표면온도 ℃</label>
+      <input id="surfaceTemp" type="number" step="0.1" placeholder="예: 30" oninput="calculateEnvironmentJudge()">
+      <div class="small-note">기준: 피도물 표면온도 43℃ 이하 / 이슬점보다 3℃ 이상 높아야 적합</div>
+
+      <div id="envJudgeBox" class="status warn">피도물 표면온도 입력 대기</div>
+      <div id="envJudgeDetail" class="small-note"></div>
       <button class="btn-secondary" style="margin-top:10px;" onclick="reloadWeather()">날씨 다시 조회</button>
     </div>
 
@@ -429,7 +434,7 @@
 
     window.addEventListener("load", function () {
       if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("./service-worker.js?v=3").catch(function () {});
+        navigator.serviceWorker.register("./service-worker.js?v=4").catch(function () {});
       }
       loadInitialData();
     });
@@ -706,7 +711,6 @@
       document.getElementById("externalTemp").textContent = safeText(weather.externalTemp);
       document.getElementById("externalHumidity").textContent = safeText(weather.externalHumidity);
       document.getElementById("dewPoint").textContent = safeText(weather.dewPoint);
-      document.getElementById("tempDiff").textContent = safeText(weather.tempDiff);
 
       const status = document.getElementById("weatherStatus");
 
@@ -716,22 +720,62 @@
         status.textContent = "날씨 조회 실패: " + (weather.message || "");
       }
 
+      calculateEnvironmentJudge();
+    }
+
+    function calculateEnvironmentJudge() {
+      const surfaceTemp = toNumber(document.getElementById("surfaceTemp").value);
+      const dewPoint = toNumber(weather.dewPoint);
+
       const box = document.getElementById("envJudgeBox");
+      const detail = document.getElementById("envJudgeDetail");
+      const diffEl = document.getElementById("tempDiff");
+
       box.className = "status";
 
-      if (weather.envJudge === "정상") {
-        box.classList.add("ok");
-        box.textContent = "환경판정: 정상";
-      } else if (weather.envJudge === "경고") {
+      if (surfaceTemp === "" || dewPoint === "") {
+        diffEl.textContent = "-";
+        weather.surfaceTemp = "";
+        weather.tempDiff = "";
+        weather.envJudge = "판정불가";
+        weather.envReason = "피도물 표면온도를 입력하면 환경판정이 계산됩니다.";
         box.classList.add("warn");
-        box.textContent = "환경판정: 경고";
-      } else if (weather.envJudge === "위험") {
-        box.classList.add("ng");
-        box.textContent = "환경판정: 위험";
-      } else {
-        box.classList.add("warn");
-        box.textContent = "환경판정: " + (weather.envJudge || "판정불가");
+        box.textContent = "피도물 표면온도 입력 대기";
+        detail.textContent = weather.envReason;
+        return "판정불가";
       }
+
+      const diff = round1(surfaceTemp - dewPoint);
+      diffEl.textContent = diff;
+
+      const reasons = [];
+
+      if (surfaceTemp > 43) {
+        reasons.push("피도물 표면온도 43℃ 초과");
+      }
+
+      if (diff < 3) {
+        reasons.push("피도물 표면온도와 이슬점온도 차이 3℃ 미만");
+      }
+
+      weather.surfaceTemp = surfaceTemp;
+      weather.tempDiff = diff;
+
+      if (reasons.length === 0) {
+        weather.envJudge = "적합";
+        weather.envReason = "피도물 표면온도 43℃ 이하 / 이슬점 대비 3℃ 이상";
+        box.classList.add("ok");
+        box.textContent = "환경판정: 적합";
+        detail.textContent = weather.envReason;
+        return "적합";
+      }
+
+      weather.envJudge = "부적합";
+      weather.envReason = reasons.join(", ");
+      box.classList.add("ng");
+      box.textContent = "환경판정: 부적합";
+      detail.textContent = weather.envReason;
+      return "부적합";
     }
 
     function reloadWeather() {
@@ -901,6 +945,12 @@
         return;
       }
 
+      const envJudge = calculateEnvironmentJudge();
+      if (envJudge === "판정불가") {
+        showToast("피도물 표면온도를 입력하세요.");
+        return;
+      }
+
       const finalJudge = calculateJudge();
       if (finalJudge === "판정불가") {
         showToast("필수 검사값을 모두 입력하세요.");
@@ -920,6 +970,7 @@
         colorNo: selectedProduct.colorNo || "",
         glossType: selectedProduct.glossType || "",
         glossInspection: glossTarget ? "Y" : "N",
+        surfaceTemp: document.getElementById("surfaceTemp").value,
 
         primerThickness: document.getElementById("primerThickness").value,
         totalThickness: document.getElementById("totalThickness").value,
@@ -966,7 +1017,7 @@
       selectedProduct = null;
       clearProductFields();
 
-      ["lot", "primerThickness", "totalThickness", "topcoatThickness", "colorDiff", "glossValue", "memo"].forEach(function (id) {
+      ["lot", "surfaceTemp", "primerThickness", "totalThickness", "topcoatThickness", "colorDiff", "glossValue", "memo"].forEach(function (id) {
         document.getElementById(id).value = "";
       });
 
@@ -977,6 +1028,7 @@
       img.src = "";
       img.classList.add("hidden");
 
+      calculateEnvironmentJudge();
       calculateJudge();
     }
 

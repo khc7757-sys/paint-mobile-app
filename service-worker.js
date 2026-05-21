@@ -1,11 +1,11 @@
-const CACHE_NAME = 'paint-mobile-field-pwa-v3';
+const CACHE_NAME = 'paint-mobile-v4-environment';
 
 const APP_FILES = [
   './',
-  './index.html?v=3',
-  './manifest.json?v=3',
-  './icon-192.png?v=3',
-  './icon-512.png?v=3'
+  './index.html?v=4',
+  './manifest.json?v=4',
+  './icon-192.png?v=4',
+  './icon-512.png?v=4'
 ];
 
 self.addEventListener('install', function(event) {
