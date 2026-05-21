@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>도장 현장작업</title>
+
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+  <link rel="apple-touch-icon" href="./icon-512.png">
+
+  <meta name="theme-color" content="#174a7c">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="도장 현장작업">
+  <meta name="apple-mobile-web-app-title" content="도장 현장작업">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      background: #f4f6f8;
+      color: #1f2937;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: #fff;
+      border-radius: 22px;
+      padding: 28px 22px;
+      text-align: center;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+    }
+    img {
+      width: 96px;
+      height: 96px;
+      border-radius: 22px;
+      margin-bottom: 14px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      color: #174a7c;
+    }
+    p {
+      margin: 8px 0;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #4b5563;
+    }
+    a {
+      display: block;
+      width: 100%;
+      margin-top: 18px;
+      padding: 15px;
+      border-radius: 14px;
+      border: 0;
+      background: #174a7c;
+      color: #fff;
+      font-size: 17px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .note {
+      margin-top: 14px;
+      font-size: 12px;
+      color: #6b7280;
+    }
+  </style>
+
+  <script>
+    const targetUrl = "https://script.google.com/macros/s/AKfycbxiU6pHyhoT7qWBhFq2GZyGaVwMahmwdalOXL0TjoKoY1nXH_kXDFpy4CijyZdLQqn1/exec?page=mobile";
+
+    function openApp() {
+      window.location.href = targetUrl;
+    }
+
+    window.addEventListener("load", function () {
+      setTimeout(openApp, 700);
+    });
+  </script>
+</head>
+<body>
+  <main class="card">
+    <img src="./icon-192.png" alt="도장 현장작업 아이콘">
+    <h1>도장 현장작업</h1>
+    <p>도장 현장작업 체크시트 모바일 화면으로 이동합니다.</p>
+    <a href="https://script.google.com/macros/s/AKfycbxiU6pHyhoT7qWBhFq2GZyGaVwMahmwdalOXL0TjoKoY1nXH_kXDFpy4CijyZdLQqn1/exec?page=mobile">바로 실행</a>
+    <p class="note">홈 화면에 추가할 때 이 페이지 주소를 사용하세요.</p>
+  </main>
+</body>
+</html>
