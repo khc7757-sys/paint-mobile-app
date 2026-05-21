@@ -1,101 +1,196 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>도장 현장작업</title>
 
   <link rel="manifest" href="./manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
-  <link rel="apple-touch-icon" href="./icon-512.png">
+  <link rel="apple-touch-icon" href="./icon-192.png">
 
   <meta name="theme-color" content="#174a7c">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="도장 현장작업">
-  <meta name="apple-mobile-web-app-title" content="도장 현장작업">
+  <meta name="apple-mobile-web-app-title" content="도장작업">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
   <style>
-    * {
-      box-sizing: border-box;
+    :root {
+      --bg: #f3f6fb;
+      --panel: #ffffff;
+      --ink: #142033;
+      --muted: #667085;
+      --line: #d7deea;
+      --blue: #174a7c;
+      --blue2: #1d4ed8;
+      --shadow: 0 10px 24px rgba(16, 24, 40, .10);
+      --radius: 20px;
     }
-    body {
+
+    * { box-sizing: border-box; }
+
+    html, body {
       margin: 0;
-      min-height: 100vh;
-      font-family: Arial, "Noto Sans KR", sans-serif;
-      background: #f4f6f8;
-      color: #1f2937;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-    .card {
       width: 100%;
-      max-width: 420px;
-      background: #fff;
-      border-radius: 22px;
-      padding: 28px 22px;
+      min-height: 100%;
+      overflow-x: hidden;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      -webkit-text-size-adjust: 100%;
+    }
+
+    header {
+      background: linear-gradient(135deg, #174a7c, #0b2f5c);
+      color: #fff;
+      padding: calc(22px + env(safe-area-inset-top)) 18px 20px;
+      box-shadow: 0 6px 18px rgba(0,0,0,.16);
+    }
+
+    .head-title {
+      font-size: 22px;
+      font-weight: 900;
+      margin: 0;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+    }
+
+    .head-sub {
+      font-size: 13px;
+      opacity: .88;
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+
+    main {
+      width: 100%;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 18px 14px 80px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
       text-align: center;
-      box-shadow: 0 12px 32px rgba(0,0,0,0.12);
     }
-    img {
-      width: 96px;
-      height: 96px;
-      border-radius: 22px;
-      margin-bottom: 14px;
+
+    .app-icon {
+      width: 112px;
+      height: 112px;
+      border-radius: 26px;
+      box-shadow: 0 8px 22px rgba(0,0,0,.16);
+      margin: 4px auto 14px;
+      display: block;
     }
+
     h1 {
-      margin: 0 0 8px;
+      margin: 0;
       font-size: 24px;
-      color: #174a7c;
+      font-weight: 900;
+      color: var(--blue);
+      letter-spacing: -0.03em;
     }
+
     p {
-      margin: 8px 0;
+      margin: 10px 0 0;
       font-size: 15px;
-      line-height: 1.5;
-      color: #4b5563;
+      line-height: 1.55;
+      color: var(--muted);
     }
-    a {
+
+    .btn {
       display: block;
       width: 100%;
       margin-top: 18px;
-      padding: 15px;
-      border-radius: 14px;
       border: 0;
-      background: #174a7c;
+      border-radius: 15px;
+      background: var(--blue);
       color: #fff;
-      font-size: 17px;
-      font-weight: bold;
+      font-size: 18px;
+      font-weight: 900;
+      padding: 16px;
       text-decoration: none;
+      box-shadow: 0 8px 16px rgba(23,74,124,.20);
     }
-    .note {
-      margin-top: 14px;
+
+    .guide {
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 15px;
+      background: #eef5fb;
+      border: 1px solid #d8e7f3;
+      color: #174a7c;
+      text-align: left;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .guide b {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .small {
+      margin-top: 12px;
       font-size: 12px;
-      color: #6b7280;
+      color: #7b8494;
     }
   </style>
 
   <script>
-    const targetUrl = "https://script.google.com/macros/s/AKfycbxiU6pHyhoT7qWBhFq2GZyGaVwMahmwdalOXL0TjoKoY1nXH_kXDFpy4CijyZdLQqn1/exec?page=mobile";
+    const TARGET_URL = "https://script.google.com/macros/s/AKfycbxiU6pHyhoT7qWBhFq2GZyGaVwMahmwdalOXL0TjoKoY1nXH_kXDFpy4CijyZdLQqn1/exec?page=mobile";
 
-    function openApp() {
-      window.location.href = targetUrl;
+    function isStandaloneMode() {
+      return window.matchMedia("(display-mode: standalone)").matches ||
+             window.navigator.standalone === true;
+    }
+
+    function openWorkScreen() {
+      window.location.href = TARGET_URL;
     }
 
     window.addEventListener("load", function () {
-      setTimeout(openApp, 700);
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("./service-worker.js").catch(function () {});
+      }
+
+      // 브라우저에서 설치할 때는 GitHub 주소가 유지되어야 아이콘이 잡힙니다.
+      // 홈 화면 아이콘으로 실행된 경우에만 실제 Apps Script 작업 화면으로 자동 이동합니다.
+      if (isStandaloneMode()) {
+        setTimeout(openWorkScreen, 350);
+      }
     });
   </script>
 </head>
+
 <body>
-  <main class="card">
-    <img src="./icon-192.png" alt="도장 현장작업 아이콘">
-    <h1>도장 현장작업</h1>
-    <p>도장 현장작업 체크시트 모바일 화면으로 이동합니다.</p>
-    <a href="https://script.google.com/macros/s/AKfycbxiU6pHyhoT7qWBhFq2GZyGaVwMahmwdalOXL0TjoKoY1nXH_kXDFpy4CijyZdLQqn1/exec?page=mobile">바로 실행</a>
-    <p class="note">홈 화면에 추가할 때 이 페이지 주소를 사용하세요.</p>
+  <header>
+    <h1 class="head-title">도장 현장작업</h1>
+    <div class="head-sub">현장 입력용 모바일 실행 페이지</div>
+  </header>
+
+  <main>
+    <section class="card">
+      <img class="app-icon" src="./icon-512.png" alt="도장 현장작업 아이콘">
+      <h1>도장 현장작업</h1>
+      <p>도장 현장작업 체크시트 모바일 화면을 실행합니다.</p>
+
+      <a class="btn" href="https://script.google.com/macros/s/AKfycbxiU6pHyhoT7qWBhFq2GZyGaVwMahmwdalOXL0TjoKoY1nXH_kXDFpy4CijyZdLQqn1/exec?page=mobile">작업 화면 열기</a>
+
+      <div class="guide">
+        <b>설치 방법</b>
+        이 GitHub 화면에서 크롬 메뉴를 열고 <b>홈 화면에 추가</b>를 누르세요.<br>
+        주소창이 <b>khc7757-sys.github.io</b>일 때 추가해야 전용 아이콘이 적용됩니다.
+      </div>
+
+      <div class="small">홈 화면 아이콘으로 실행하면 작업 화면으로 자동 이동합니다.</div>
+    </section>
   </main>
 </body>
 </html>
