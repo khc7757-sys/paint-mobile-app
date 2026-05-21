@@ -18,3 +18,9 @@ https://script.google.com/macros/s/AKfycbxiU6pHyhoT7qWBhFq2GZyGaVwMahmwdalOXL0Tj
 - 날씨 / 이슬점 조회
 - 도장 작업 저장
 - 사진 첨부 저장 요청
+
+
+## v2 변경
+
+- 기본 작업자: 서우석, 김민수, 김동윤, 문건호, 김태성, 권영수
+- 모바일 작업자 추가/삭제 기능 추가

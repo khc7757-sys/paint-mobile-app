@@ -2,7 +2,7 @@
   "name": "도장 현장작업",
   "short_name": "도장작업",
   "description": "도장 현장작업 체크시트 모바일 PWA",
-  "start_url": "./index.html?v=1",
+  "start_url": "./index.html?v=2",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f4f6f8",
@@ -10,13 +10,13 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "./icon-192.png?v=1",
+      "src": "./icon-192.png?v=2",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icon-512.png?v=1",
+      "src": "./icon-512.png?v=2",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
