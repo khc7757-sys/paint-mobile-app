@@ -355,21 +355,6 @@
 
 
     <div class="card">
-      <h2>작업자 관리</h2>
-
-      <label>작업자 추가</label>
-      <input id="newWorkerName" placeholder="작업자명 입력">
-
-      <label>삭제할 작업자 선택</label>
-      <select id="workerAdminSelect"></select>
-
-      <button class="btn-primary" style="margin-top:12px;" onclick="addWorkerFromAdmin()">작업자 추가</button>
-      <button class="btn-secondary" style="margin-top:10px;" onclick="deleteSelectedWorker()">선택 작업자 삭제</button>
-
-      <div class="small-note">삭제는 작업자목록 시트에서 사용여부를 N으로 변경합니다.</div>
-    </div>
-
-    <div class="card">
       <h2>2. 검사 입력</h2>
 
       <label>하도두께 ㎛</label>
@@ -444,7 +429,7 @@
 
     window.addEventListener("load", function () {
       if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("./service-worker.js?v=2").catch(function () {});
+        navigator.serviceWorker.register("./service-worker.js?v=3").catch(function () {});
       }
       loadInitialData();
     });
@@ -704,8 +689,7 @@
         "<b>하도사양:</b> " + safeText(p.primerSpec) + "<br>" +
         "<b>상도사양:</b> " + safeText(p.topcoatSpec) + "<br>" +
         "<b>광택구분:</b> " + safeText(p.glossType) + "<br>" +
-        "<b>광택검사:</b> " + (glossTarget ? "Y" : "N") + "<br>" +
-        "<b>도장업체:</b> " + safeText(p.painter);
+        "<b>광택검사:</b> " + (glossTarget ? "Y" : "N");
 
       calculateJudge();
     }
