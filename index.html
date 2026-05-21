@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>도장 현장작업</title>
 
-  <link rel="manifest" href="./manifest.json">
-  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
-  <link rel="apple-touch-icon" href="./icon-192.png">
+  <link rel="manifest" href="./manifest.json?v=1">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png?v=1">
+  <link rel="apple-touch-icon" href="./icon-512.png?v=1">
 
   <meta name="theme-color" content="#174a7c">
   <meta name="mobile-web-app-capable" content="yes">
@@ -17,180 +17,917 @@
 
   <style>
     :root {
-      --bg: #f3f6fb;
-      --panel: #ffffff;
-      --ink: #142033;
-      --muted: #667085;
-      --line: #d7deea;
-      --blue: #174a7c;
-      --blue2: #1d4ed8;
-      --shadow: 0 10px 24px rgba(16, 24, 40, .10);
-      --radius: 20px;
+      --blue:#174a7c;
+      --blue2:#0f3c68;
+      --bg:#f4f6f8;
+      --card:#fff;
+      --line:#d8e0ea;
+      --text:#1f2937;
+      --muted:#667085;
+      --ok-bg:#e6f4ea;
+      --ok:#137333;
+      --ng-bg:#fdecea;
+      --ng:#b42318;
+      --warn-bg:#fff4d6;
+      --warn:#8a5a00;
     }
 
-    * { box-sizing: border-box; }
+    * { box-sizing:border-box; }
 
     html, body {
-      margin: 0;
-      width: 100%;
-      min-height: 100%;
-      overflow-x: hidden;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
-      background: var(--bg);
-      color: var(--ink);
-      -webkit-text-size-adjust: 100%;
+      margin:0;
+      min-height:100%;
+      font-family:Arial, "Noto Sans KR", system-ui, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      -webkit-text-size-adjust:100%;
     }
 
     header {
-      background: linear-gradient(135deg, #174a7c, #0b2f5c);
-      color: #fff;
-      padding: calc(22px + env(safe-area-inset-top)) 18px 20px;
-      box-shadow: 0 6px 18px rgba(0,0,0,.16);
+      position:sticky;
+      top:0;
+      z-index:20;
+      padding:calc(14px + env(safe-area-inset-top)) 16px 14px;
+      background:linear-gradient(135deg, var(--blue), var(--blue2));
+      color:#fff;
+      box-shadow:0 4px 12px rgba(0,0,0,.16);
     }
 
-    .head-title {
-      font-size: 22px;
-      font-weight: 900;
-      margin: 0;
-      letter-spacing: -0.03em;
-      line-height: 1.2;
+    .header-title {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:20px;
+      font-weight:900;
+      letter-spacing:-.04em;
     }
 
-    .head-sub {
-      font-size: 13px;
-      opacity: .88;
-      margin-top: 6px;
-      line-height: 1.4;
+    .header-title img {
+      width:34px;
+      height:34px;
+      border-radius:9px;
+      background:#fff;
+    }
+
+    .header-sub {
+      margin-top:5px;
+      font-size:12px;
+      opacity:.88;
     }
 
     main {
-      width: 100%;
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 18px 14px 80px;
+      width:100%;
+      max-width:620px;
+      margin:0 auto;
+      padding:12px 12px 96px;
     }
 
     .card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 20px;
-      text-align: center;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      margin-bottom:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,.07);
     }
 
-    .app-icon {
-      width: 112px;
-      height: 112px;
-      border-radius: 26px;
-      box-shadow: 0 8px 22px rgba(0,0,0,.16);
-      margin: 4px auto 14px;
-      display: block;
+    h2 {
+      margin:0 0 12px;
+      font-size:16px;
+      color:var(--blue);
+      border-bottom:1px solid #e8edf3;
+      padding-bottom:8px;
+      letter-spacing:-.03em;
     }
 
-    h1 {
-      margin: 0;
-      font-size: 24px;
-      font-weight: 900;
-      color: var(--blue);
-      letter-spacing: -0.03em;
+    label {
+      display:block;
+      margin:12px 0 5px;
+      color:#4b5563;
+      font-size:13px;
+      font-weight:800;
     }
 
-    p {
-      margin: 10px 0 0;
-      font-size: 15px;
-      line-height: 1.55;
-      color: var(--muted);
+    input, select, textarea, button {
+      width:100%;
+      font-size:16px;
+      border-radius:11px;
+      border:1px solid #cbd5e1;
+      padding:12px;
+      background:#fff;
+      color:var(--text);
     }
 
-    .btn {
-      display: block;
-      width: 100%;
-      margin-top: 18px;
-      border: 0;
-      border-radius: 15px;
-      background: var(--blue);
-      color: #fff;
-      font-size: 18px;
-      font-weight: 900;
-      padding: 16px;
-      text-decoration: none;
-      box-shadow: 0 8px 16px rgba(23,74,124,.20);
+    input[readonly] {
+      background:#eef2f7;
     }
 
-    .guide {
-      margin-top: 16px;
-      padding: 14px;
-      border-radius: 15px;
-      background: #eef5fb;
-      border: 1px solid #d8e7f3;
-      color: #174a7c;
-      text-align: left;
-      font-size: 13px;
-      line-height: 1.6;
+    textarea {
+      min-height:82px;
+      resize:vertical;
     }
 
-    .guide b {
-      display: block;
-      margin-bottom: 4px;
-      font-size: 14px;
+    button {
+      border:0;
+      font-weight:900;
+      cursor:pointer;
     }
 
-    .small {
-      margin-top: 12px;
-      font-size: 12px;
-      color: #7b8494;
+    .btn-primary {
+      background:var(--blue);
+      color:#fff;
+      padding:15px;
+      font-size:18px;
+    }
+
+    .btn-secondary {
+      background:#e9eef3;
+      color:var(--blue);
+    }
+
+    .row2 {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+
+    .weather-grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-top:10px;
+    }
+
+    .weather-item {
+      background:#f7f9fb;
+      border:1px solid #e1e6eb;
+      border-radius:13px;
+      padding:10px;
+      text-align:center;
+    }
+
+    .weather-title {
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+
+    .weather-value {
+      font-size:18px;
+      font-weight:900;
+      color:var(--blue);
+    }
+
+    .status {
+      padding:13px;
+      border-radius:12px;
+      font-weight:900;
+      text-align:center;
+      margin-top:12px;
+      font-size:17px;
+    }
+
+    .ok {
+      background:var(--ok-bg);
+      color:var(--ok);
+      border:1px solid #b7dfc2;
+    }
+
+    .ng {
+      background:var(--ng-bg);
+      color:var(--ng);
+      border:1px solid #f4b9b2;
+    }
+
+    .warn {
+      background:var(--warn-bg);
+      color:var(--warn);
+      border:1px solid #f1cf77;
+    }
+
+    .muted {
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .small-note {
+      color:#747f8f;
+      font-size:12px;
+      line-height:1.45;
+      margin-top:5px;
+    }
+
+    .detail-mini {
+      background:#f7f9fb;
+      border:1px solid #e1e6eb;
+      border-radius:12px;
+      padding:10px;
+      margin-top:10px;
+      font-size:13px;
+      color:#444;
+      line-height:1.7;
+    }
+
+    .preview-img {
+      width:100%;
+      max-height:220px;
+      object-fit:contain;
+      border-radius:12px;
+      border:1px solid #ddd;
+      margin-top:8px;
+      background:#f7f7f7;
+    }
+
+    .hidden { display:none !important; }
+
+    .toast {
+      position:fixed;
+      left:12px;
+      right:12px;
+      bottom:18px;
+      z-index:50;
+      background:#111827;
+      color:#fff;
+      padding:13px 14px;
+      border-radius:13px;
+      font-size:14px;
+      line-height:1.45;
+      box-shadow:0 10px 24px rgba(0,0,0,.26);
+      display:none;
+    }
+
+    .bottom-bar {
+      position:fixed;
+      left:0;
+      right:0;
+      bottom:0;
+      z-index:30;
+      background:rgba(255,255,255,.96);
+      border-top:1px solid #d8e0ea;
+      padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .bottom-bar button {
+      padding:14px 10px;
+    }
+
+    .loading {
+      opacity:.64;
+      pointer-events:none;
+    }
+
+    @media (max-width:380px) {
+      .row2, .weather-grid {
+        grid-template-columns:1fr;
+      }
     }
   </style>
-
-  <script>
-    const TARGET_URL = "https://script.google.com/macros/s/AKfycbxiU6pHyhoT7qWBhFq2GZyGaVwMahmwdalOXL0TjoKoY1nXH_kXDFpy4CijyZdLQqn1/exec?page=mobile";
-
-    function isStandaloneMode() {
-      return window.matchMedia("(display-mode: standalone)").matches ||
-             window.navigator.standalone === true;
-    }
-
-    function openWorkScreen() {
-      window.location.href = TARGET_URL;
-    }
-
-    window.addEventListener("load", function () {
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("./service-worker.js").catch(function () {});
-      }
-
-      // 브라우저에서 설치할 때는 GitHub 주소가 유지되어야 아이콘이 잡힙니다.
-      // 홈 화면 아이콘으로 실행된 경우에만 실제 Apps Script 작업 화면으로 자동 이동합니다.
-      if (isStandaloneMode()) {
-        setTimeout(openWorkScreen, 350);
-      }
-    });
-  </script>
 </head>
 
 <body>
   <header>
-    <h1 class="head-title">도장 현장작업</h1>
-    <div class="head-sub">현장 입력용 모바일 실행 페이지</div>
+    <div class="header-title">
+      <img src="./icon-192.png?v=1" alt="">
+      <span>도장 현장작업</span>
+    </div>
+    <div class="header-sub">현장 입력 전용 · 도장 체크시트 PWA</div>
   </header>
 
-  <main>
-    <section class="card">
-      <img class="app-icon" src="./icon-512.png" alt="도장 현장작업 아이콘">
-      <h1>도장 현장작업</h1>
-      <p>도장 현장작업 체크시트 모바일 화면을 실행합니다.</p>
+  <main id="appRoot">
+    <div class="card">
+      <h2>날씨 / 이슬점</h2>
+      <div id="weatherStatus" class="muted">날씨 조회 중...</div>
 
-      <a class="btn" href="https://script.google.com/macros/s/AKfycbxiU6pHyhoT7qWBhFq2GZyGaVwMahmwdalOXL0TjoKoY1nXH_kXDFpy4CijyZdLQqn1/exec?page=mobile">작업 화면 열기</a>
-
-      <div class="guide">
-        <b>설치 방법</b>
-        이 GitHub 화면에서 크롬 메뉴를 열고 <b>홈 화면에 추가</b>를 누르세요.<br>
-        주소창이 <b>khc7757-sys.github.io</b>일 때 추가해야 전용 아이콘이 적용됩니다.
+      <div class="weather-grid">
+        <div class="weather-item">
+          <div class="weather-title">외부온도</div>
+          <div class="weather-value"><span id="externalTemp">-</span>℃</div>
+        </div>
+        <div class="weather-item">
+          <div class="weather-title">외부습도</div>
+          <div class="weather-value"><span id="externalHumidity">-</span>%</div>
+        </div>
+        <div class="weather-item">
+          <div class="weather-title">이슬점</div>
+          <div class="weather-value"><span id="dewPoint">-</span>℃</div>
+        </div>
+        <div class="weather-item">
+          <div class="weather-title">온도차</div>
+          <div class="weather-value"><span id="tempDiff">-</span>℃</div>
+        </div>
       </div>
 
-      <div class="small">홈 화면 아이콘으로 실행하면 작업 화면으로 자동 이동합니다.</div>
-    </section>
+      <div id="envJudgeBox" class="status warn">환경판정 대기</div>
+      <button class="btn-secondary" style="margin-top:10px;" onclick="reloadWeather()">날씨 다시 조회</button>
+    </div>
+
+    <div class="card">
+      <h2>1. 작업 정보</h2>
+
+      <label>작업자</label>
+      <select id="worker"></select>
+
+      <label>품번 검색</label>
+      <input id="partSearch" list="productList" placeholder="품번 입력 또는 선택" oninput="onPartSearch()">
+      <datalist id="productList"></datalist>
+      <div class="small-note">도장사양이 등록된 품번만 검색됩니다.</div>
+
+      <div class="row2">
+        <div>
+          <label>품번</label>
+          <input id="partNo" readonly>
+        </div>
+        <div>
+          <label>품명</label>
+          <input id="partName" readonly>
+        </div>
+      </div>
+
+      <label>LOT</label>
+      <input id="lot" placeholder="LOT 입력">
+
+      <div class="detail-mini" id="productDetail">품번 선택 시 도장사양이 표시됩니다.</div>
+    </div>
+
+    <div class="card">
+      <h2>2. 검사 입력</h2>
+
+      <label>하도두께 ㎛</label>
+      <input id="primerThickness" type="number" step="0.1" placeholder="예: 18" oninput="calculateJudge()">
+      <div class="small-note">기준: 15㎛ 이상</div>
+
+      <label>총두께 ㎛</label>
+      <input id="totalThickness" type="number" step="0.1" placeholder="예: 65" oninput="calculateJudge()">
+      <div class="small-note">상도 후 최종 총두께</div>
+
+      <label>상도두께 자동계산 ㎛</label>
+      <input id="topcoatThickness" readonly>
+      <div class="small-note">총두께 - 하도두께 / 기준: 45㎛ 이상</div>
+
+      <label>색차 ΔE</label>
+      <input id="colorDiff" type="number" step="0.01" placeholder="예: 1.5" oninput="calculateJudge()">
+      <div class="small-note">기준: ΔE 2.0 미만</div>
+
+      <div id="glossInputBox" class="hidden">
+        <label>광택값</label>
+        <input id="glossValue" type="number" step="0.1" placeholder="유광/반광 품번만 입력" oninput="calculateJudge()">
+        <div class="small-note">유광/반광 품번만 입력 / 무광은 검사 제외</div>
+      </div>
+
+      <div id="judgeBox" class="status warn">판정 대기</div>
+      <div id="judgeDetail" class="small-note"></div>
+    </div>
+
+    <div class="card">
+      <h2>3. 첨부 / 저장</h2>
+
+      <label>NG유형</label>
+      <select id="ngType"></select>
+
+      <label>사진 첨부</label>
+      <input id="photoFile" type="file" accept="image/*" onchange="previewPhoto()">
+      <img id="photoPreview" class="preview-img hidden">
+
+      <label>비고</label>
+      <textarea id="memo" placeholder="필요 시 비고 입력"></textarea>
+
+      <button class="btn-primary" style="margin-top:14px;" onclick="saveData()">작업 저장</button>
+      <button class="btn-secondary" style="margin-top:10px;" onclick="clearForm()">입력 초기화</button>
+
+      <div id="saveStatus" class="small-note"></div>
+    </div>
   </main>
+
+  <div class="bottom-bar">
+    <button class="btn-secondary" onclick="reloadAll()">새로고침</button>
+    <button class="btn-primary" onclick="saveData()">작업 저장</button>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbxiU6pHyhoT7qWBhFq2GZyGaVwMahmwdalOXL0TjoKoY1nXH_kXDFpy4CijyZdLQqn1/exec";
+    const DEFAULTS = {
+      primerMin: 15,
+      topcoatDiffMin: 45,
+      colorDiffMax: 2.0,
+      glossMin: ''
+    };
+
+    let products = [];
+    let workers = [];
+    let ngTypes = [];
+    let weather = {};
+    let selectedProduct = null;
+    let busy = false;
+
+    window.addEventListener("load", function () {
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("./service-worker.js?v=1").catch(function () {});
+      }
+      loadInitialData();
+    });
+
+    function apiGet(action, params) {
+      params = params || {};
+
+      return new Promise(function (resolve, reject) {
+        const callbackName = "jsonp_cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+
+        const query = new URLSearchParams();
+        query.set("action", action);
+        query.set("callback", callbackName);
+
+        Object.keys(params).forEach(function (key) {
+          if (params[key] !== undefined && params[key] !== null) {
+            query.set(key, params[key]);
+          }
+        });
+
+        const script = document.createElement("script");
+        script.src = API_URL + "?" + query.toString();
+
+        const timer = setTimeout(function () {
+          cleanup();
+          reject(new Error("API 응답 시간 초과"));
+        }, 30000);
+
+        window[callbackName] = function (data) {
+          cleanup();
+          resolve(data);
+        };
+
+        script.onerror = function () {
+          cleanup();
+          reject(new Error("API 호출 실패"));
+        };
+
+        function cleanup() {
+          clearTimeout(timer);
+          delete window[callbackName];
+          if (script.parentNode) script.parentNode.removeChild(script);
+        }
+
+        document.body.appendChild(script);
+      });
+    }
+
+    function apiPost(action, payload) {
+      const form = new URLSearchParams();
+      form.set("payload", JSON.stringify(payload || {}));
+
+      // Apps Script ContentService는 CORS 헤더를 직접 줄 수 없어 응답을 읽지 않습니다.
+      // 저장 요청 후 작업이력/시트에서 확인하는 방식입니다.
+      return fetch(API_URL + "?action=" + encodeURIComponent(action), {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+        },
+        body: form.toString()
+      });
+    }
+
+    function setBusy(value, text) {
+      busy = value;
+      document.getElementById("appRoot").classList.toggle("loading", value);
+      if (text) document.getElementById("saveStatus").textContent = text;
+    }
+
+    function showToast(message) {
+      const el = document.getElementById("toast");
+      el.textContent = message;
+      el.style.display = "block";
+      setTimeout(function () {
+        el.style.display = "none";
+      }, 4200);
+    }
+
+    function loadInitialData() {
+      setBusy(true, "");
+      apiGet("getInitialData")
+        .then(function (data) {
+          products = data.products || [];
+          workers = data.workers || [];
+          ngTypes = data.ngTypes || [];
+          weather = data.weather || {};
+
+          renderWorkers();
+          renderProducts();
+          renderNgTypes();
+          renderWeather();
+
+          if (products.length === 0) {
+            showToast("제품목록에서 도장사양이 있는 품번을 찾지 못했습니다.");
+          }
+        })
+        .catch(function (err) {
+          showToast("초기 데이터 조회 실패: " + err.message);
+        })
+        .finally(function () {
+          setBusy(false, "");
+        });
+    }
+
+    function reloadAll() {
+      loadInitialData();
+    }
+
+    function renderWorkers() {
+      const el = document.getElementById("worker");
+      el.innerHTML = '<option value="">작업자 선택</option>';
+
+      workers.forEach(function (w) {
+        const opt = document.createElement("option");
+        opt.value = w.name;
+        opt.textContent = w.name;
+        el.appendChild(opt);
+      });
+    }
+
+    function renderProducts() {
+      const list = document.getElementById("productList");
+      list.innerHTML = "";
+
+      products.forEach(function (p) {
+        const opt = document.createElement("option");
+        opt.value = p.partNo;
+        opt.label = (p.partName || "") + " / " + (p.topcoatSpec || "");
+        list.appendChild(opt);
+      });
+    }
+
+    function renderNgTypes() {
+      const el = document.getElementById("ngType");
+      el.innerHTML = '<option value="">선택 없음</option>';
+
+      ngTypes.forEach(function (n) {
+        const opt = document.createElement("option");
+        opt.value = n.type;
+        opt.textContent = n.category ? n.category + " - " + n.type : n.type;
+        el.appendChild(opt);
+      });
+    }
+
+    function onPartSearch() {
+      const keyword = document.getElementById("partSearch").value.trim();
+
+      const matched = products.find(function (p) {
+        return p.partNo === keyword;
+      });
+
+      if (!matched) {
+        selectedProduct = null;
+        clearProductFields();
+        calculateJudge();
+        return;
+      }
+
+      selectedProduct = matched;
+      applyProduct(matched);
+    }
+
+    function applyProduct(p) {
+      document.getElementById("partNo").value = p.partNo || "";
+      document.getElementById("partName").value = p.partName || "";
+
+      const glossTarget = isGlossTarget(p.glossType);
+
+      if (glossTarget) {
+        document.getElementById("glossInputBox").classList.remove("hidden");
+      } else {
+        document.getElementById("glossInputBox").classList.add("hidden");
+        document.getElementById("glossValue").value = "";
+      }
+
+      document.getElementById("productDetail").innerHTML =
+        "<b>색상번호:</b> " + safeText(p.colorNo) + "<br>" +
+        "<b>하도사양:</b> " + safeText(p.primerSpec) + "<br>" +
+        "<b>상도사양:</b> " + safeText(p.topcoatSpec) + "<br>" +
+        "<b>광택구분:</b> " + safeText(p.glossType) + "<br>" +
+        "<b>광택검사:</b> " + (glossTarget ? "Y" : "N") + "<br>" +
+        "<b>도장업체:</b> " + safeText(p.painter);
+
+      calculateJudge();
+    }
+
+    function clearProductFields() {
+      document.getElementById("partNo").value = "";
+      document.getElementById("partName").value = "";
+      document.getElementById("productDetail").innerHTML = "품번 선택 시 도장사양이 표시됩니다.";
+      document.getElementById("glossInputBox").classList.add("hidden");
+      document.getElementById("glossValue").value = "";
+    }
+
+    function renderWeather() {
+      document.getElementById("externalTemp").textContent = safeText(weather.externalTemp);
+      document.getElementById("externalHumidity").textContent = safeText(weather.externalHumidity);
+      document.getElementById("dewPoint").textContent = safeText(weather.dewPoint);
+      document.getElementById("tempDiff").textContent = safeText(weather.tempDiff);
+
+      const status = document.getElementById("weatherStatus");
+
+      if (weather.success) {
+        status.textContent = "자동날씨 조회 완료 / 기준시간: " + (weather.weatherTime || "-");
+      } else {
+        status.textContent = "날씨 조회 실패: " + (weather.message || "");
+      }
+
+      const box = document.getElementById("envJudgeBox");
+      box.className = "status";
+
+      if (weather.envJudge === "정상") {
+        box.classList.add("ok");
+        box.textContent = "환경판정: 정상";
+      } else if (weather.envJudge === "경고") {
+        box.classList.add("warn");
+        box.textContent = "환경판정: 경고";
+      } else if (weather.envJudge === "위험") {
+        box.classList.add("ng");
+        box.textContent = "환경판정: 위험";
+      } else {
+        box.classList.add("warn");
+        box.textContent = "환경판정: " + (weather.envJudge || "판정불가");
+      }
+    }
+
+    function reloadWeather() {
+      apiGet("getWeatherAndDewPoint")
+        .then(function (data) {
+          weather = data || {};
+          renderWeather();
+          showToast("날씨 다시 조회 완료");
+        })
+        .catch(function (err) {
+          showToast("날씨 조회 실패: " + err.message);
+        });
+    }
+
+    function calculateJudge() {
+      const primer = toNumber(document.getElementById("primerThickness").value);
+      const total = toNumber(document.getElementById("totalThickness").value);
+      const colorDiff = toNumber(document.getElementById("colorDiff").value);
+      const glossValue = toNumber(document.getElementById("glossValue").value);
+
+      const primerMin = selectedProduct && toNumber(selectedProduct.primerMin) !== "" ? toNumber(selectedProduct.primerMin) : DEFAULTS.primerMin;
+      const topcoatDiffMin = selectedProduct && toNumber(selectedProduct.topcoatDiffMin) !== "" ? toNumber(selectedProduct.topcoatDiffMin) : DEFAULTS.topcoatDiffMin;
+      const colorDiffMax = selectedProduct && toNumber(selectedProduct.colorDiffMax) !== "" ? toNumber(selectedProduct.colorDiffMax) : DEFAULTS.colorDiffMax;
+      const glossMin = selectedProduct && toNumber(selectedProduct.glossMin) !== "" ? toNumber(selectedProduct.glossMin) : "";
+      const glossTarget = selectedProduct ? isGlossTarget(selectedProduct.glossType) : false;
+
+      let topcoat = "";
+
+      if (primer !== "" && total !== "") {
+        topcoat = round1(total - primer);
+      }
+
+      document.getElementById("topcoatThickness").value = topcoat;
+
+      const details = [];
+      let finalJudge = "OK";
+
+      if (primer === "") {
+        details.push("하도두께 미입력");
+        finalJudge = "판정불가";
+      } else if (primer < primerMin) {
+        details.push("하도두께 NG");
+        finalJudge = "NG";
+      } else {
+        details.push("하도두께 OK");
+      }
+
+      if (topcoat === "") {
+        details.push("상도두께 미입력");
+        if (finalJudge !== "NG") finalJudge = "판정불가";
+      } else if (topcoat < topcoatDiffMin) {
+        details.push("상도두께 NG");
+        finalJudge = "NG";
+      } else {
+        details.push("상도두께 OK");
+      }
+
+      if (colorDiff === "") {
+        details.push("색차 미입력");
+        if (finalJudge !== "NG") finalJudge = "판정불가";
+      } else if (colorDiff >= colorDiffMax) {
+        details.push("색차 NG");
+        finalJudge = "NG";
+      } else {
+        details.push("색차 OK");
+      }
+
+      if (glossTarget) {
+        if (glossValue === "") {
+          details.push("광택값 미입력");
+          if (finalJudge !== "NG") finalJudge = "판정불가";
+        } else if (glossMin !== "") {
+          if (glossValue < glossMin) {
+            details.push("광택 NG");
+            finalJudge = "NG";
+          } else {
+            details.push("광택 OK");
+          }
+        } else {
+          details.push("광택값 입력 확인");
+        }
+      } else if (selectedProduct) {
+        details.push("무광 품번: 광택 검사 제외");
+      }
+
+      const box = document.getElementById("judgeBox");
+      box.className = "status";
+
+      if (finalJudge === "OK") {
+        box.classList.add("ok");
+        box.textContent = "최종판정: OK";
+      } else if (finalJudge === "NG") {
+        box.classList.add("ng");
+        box.textContent = "최종판정: NG";
+      } else {
+        box.classList.add("warn");
+        box.textContent = "판정 대기";
+      }
+
+      document.getElementById("judgeDetail").textContent = details.join(" / ");
+      return finalJudge;
+    }
+
+    function previewPhoto() {
+      const file = document.getElementById("photoFile").files[0];
+      const img = document.getElementById("photoPreview");
+
+      if (!file) {
+        img.classList.add("hidden");
+        img.src = "";
+        return;
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        img.src = e.target.result;
+        img.classList.remove("hidden");
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    function fileToBase64(file) {
+      return new Promise(function (resolve, reject) {
+        if (!file) {
+          resolve(null);
+          return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          const result = e.target.result || "";
+          resolve({
+            base64Data: String(result).split(",")[1] || "",
+            fileName: file.name || "photo.jpg",
+            mimeType: file.type || "image/jpeg"
+          });
+        };
+
+        reader.onerror = function () {
+          reject(new Error("사진 파일 읽기 실패"));
+        };
+
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function saveData() {
+      if (busy) return;
+
+      if (!selectedProduct) {
+        showToast("제품목록에 등록된 품번을 선택하세요.");
+        return;
+      }
+
+      const worker = document.getElementById("worker").value;
+      if (!worker) {
+        showToast("작업자를 선택하세요.");
+        return;
+      }
+
+      const lot = document.getElementById("lot").value.trim();
+      if (!lot) {
+        showToast("LOT를 입력하세요.");
+        return;
+      }
+
+      const finalJudge = calculateJudge();
+      if (finalJudge === "판정불가") {
+        showToast("필수 검사값을 모두 입력하세요.");
+        return;
+      }
+
+      const glossTarget = selectedProduct ? isGlossTarget(selectedProduct.glossType) : false;
+
+      const input = {
+        worker: worker,
+        customer: selectedProduct.customer || "한화에어로스페이스",
+        partNo: selectedProduct.partNo || "",
+        partName: selectedProduct.partName || "",
+        lot: lot,
+        primerSpec: selectedProduct.primerSpec || "",
+        topcoatSpec: selectedProduct.topcoatSpec || "",
+        colorNo: selectedProduct.colorNo || "",
+        glossType: selectedProduct.glossType || "",
+        glossInspection: glossTarget ? "Y" : "N",
+
+        primerThickness: document.getElementById("primerThickness").value,
+        totalThickness: document.getElementById("totalThickness").value,
+        colorDiff: document.getElementById("colorDiff").value,
+        glossValue: glossTarget ? document.getElementById("glossValue").value : "",
+
+        primerMin: selectedProduct.primerMin || DEFAULTS.primerMin,
+        topcoatDiffMin: selectedProduct.topcoatDiffMin || DEFAULTS.topcoatDiffMin,
+        colorDiffMax: selectedProduct.colorDiffMax || DEFAULTS.colorDiffMax,
+        glossMin: selectedProduct.glossMin || "",
+
+        ngType: document.getElementById("ngType").value,
+        memo: document.getElementById("memo").value,
+        photoUrls: "",
+        weather: weather
+      };
+
+      const file = document.getElementById("photoFile").files[0];
+
+      setBusy(true, "저장 중... 화면을 닫지 마세요.");
+
+      fileToBase64(file)
+        .then(function (photo) {
+          const payload = { input: input, photo: photo };
+          return apiPost("saveInspectionWithPhoto", payload);
+        })
+        .then(function () {
+          document.getElementById("saveStatus").textContent = "저장 요청 완료. 시트 반영까지 잠시 기다려주세요.";
+          showToast("저장 요청 완료. 작업이력에서 반영 여부를 확인하세요.");
+          setTimeout(function () {
+            clearForm();
+          }, 1200);
+        })
+        .catch(function (err) {
+          showToast("저장 실패: " + err.message);
+        })
+        .finally(function () {
+          setBusy(false, "");
+        });
+    }
+
+    function clearForm() {
+      document.getElementById("partSearch").value = "";
+      selectedProduct = null;
+      clearProductFields();
+
+      ["lot", "primerThickness", "totalThickness", "topcoatThickness", "colorDiff", "glossValue", "memo"].forEach(function (id) {
+        document.getElementById(id).value = "";
+      });
+
+      document.getElementById("ngType").value = "";
+      document.getElementById("photoFile").value = "";
+
+      const img = document.getElementById("photoPreview");
+      img.src = "";
+      img.classList.add("hidden");
+
+      calculateJudge();
+    }
+
+    function isGlossTarget(glossType) {
+      const text = String(glossType || "").trim();
+
+      if (!text) return false;
+      if (text.includes("무광")) return false;
+      if (text.includes("유광")) return true;
+      if (text.includes("반광")) return true;
+      if (text.includes("광")) return true;
+
+      return false;
+    }
+
+    function toNumber(value) {
+      if (value === null || value === undefined || value === "") return "";
+
+      const num = Number(String(value).replace(/[^\d.-]/g, ""));
+      return isNaN(num) ? "" : num;
+    }
+
+    function round1(value) {
+      return Math.round(Number(value) * 10) / 10;
+    }
+
+    function safeText(value) {
+      if (value === null || value === undefined || value === "") return "-";
+      return String(value);
+    }
+  </script>
 </body>
 </html>
