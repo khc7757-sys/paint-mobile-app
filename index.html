@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>도장 현장작업 모바일</title>
-  <link rel="manifest" href="./manifest.json?v=7">
-  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png?v=7">
-  <link rel="apple-touch-icon" href="./icon-512.png?v=7">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+  <link rel="apple-touch-icon" href="./icon-512.png">
   <meta name="theme-color" content="#174a7c">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -25,7 +25,7 @@
   </style>
 </head>
 <body>
-<header><div class="header-title"><img src="./icon-192.png?v=7" alt=""><span>도장 현장작업</span></div><div class="header-sub">현장 작업자용 · 하도 입력 / 상도 입력</div></header>
+<header><div class="header-title"><img src="./icon-192.png" alt=""><span>도장 현장작업</span></div><div class="header-sub">현장 작업자용 · 하도 입력 / 상도 입력</div></header>
 <main id="appRoot">
   <div class="tabbar"><button id="tabPrimer" class="active" onclick="showMode('primer')">하도 입력</button><button id="tabTopcoat" onclick="showMode('topcoat')">상도 입력</button></div>
 
@@ -45,7 +45,7 @@
 const API_URL="https://script.google.com/macros/s/AKfycbxiU6pHyhoT7qWBhFq2GZyGaVwMahmwdalOXL0TjoKoY1nXH_kXDFpy4CijyZdLQqn1/exec";
 const DEFAULTS={primerMin:15,topcoatDiffMin:45,colorDiffMax:2.0,glossMin:""};
 let products=[],workers=[],weather={},selectedProduct=null,selectedTopcoatProduct=null,selectedTopcoatRow=null,busy=false,currentMode="primer";
-window.addEventListener("load",function(){if("serviceWorker" in navigator){navigator.serviceWorker.register("./service-worker.js?v=7").catch(function(){});}loadInitialData();});
+window.addEventListener("load",function(){if("serviceWorker" in navigator){navigator.serviceWorker.register("./service-worker.js").catch(function(){});}loadInitialData();});
 function apiGet(action,params){params=params||{};return new Promise(function(resolve,reject){const cb="jsonp_cb_"+Date.now()+"_"+Math.floor(Math.random()*100000);const query=new URLSearchParams();query.set("action",action);query.set("callback",cb);Object.keys(params).forEach(function(k){if(params[k]!==undefined&&params[k]!==null)query.set(k,params[k]);});const script=document.createElement("script");script.src=API_URL+"?"+query.toString();const timer=setTimeout(function(){cleanup();reject(new Error("API 응답 시간 초과"));},30000);window[cb]=function(data){cleanup();resolve(data);};script.onerror=function(){cleanup();reject(new Error("API 호출 실패"));};function cleanup(){clearTimeout(timer);delete window[cb];if(script.parentNode)script.parentNode.removeChild(script);}document.body.appendChild(script);});}
 function setBusy(v,text){busy=v;document.getElementById("appRoot").classList.toggle("loading",v);if(text){const id=currentMode==="primer"?"primerSaveStatus":"topcoatSaveStatus";const el=document.getElementById(id);if(el)el.textContent=text;}}
 function showToast(msg){const el=document.getElementById("toast");el.textContent=msg;el.style.display="block";setTimeout(function(){el.style.display="none";},4200);}
