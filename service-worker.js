@@ -1,4 +1,4 @@
-const CACHE_NAME = 'paint-mobile-v8-primer-topcoat-install-fix';
+const CACHE_NAME = 'paint-mobile-v9-icon-size-adjust';
 const ASSETS = [
   './',
   './index.html',
