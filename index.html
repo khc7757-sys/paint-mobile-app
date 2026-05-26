@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>도장 현장작업 모바일</title>
-  <link rel="manifest" href="./manifest.json?v=6">
-  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png?v=6">
-  <link rel="apple-touch-icon" href="./icon-512.png?v=6">
+  <link rel="manifest" href="./manifest.json?v=7">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png?v=7">
+  <link rel="apple-touch-icon" href="./icon-512.png?v=7">
   <meta name="theme-color" content="#174a7c">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -25,13 +25,13 @@
   </style>
 </head>
 <body>
-<header><div class="header-title"><img src="./icon-192.png?v=6" alt=""><span>도장 현장작업</span></div><div class="header-sub">현장 작업자용 · 하도 입력 / 상도 입력</div></header>
+<header><div class="header-title"><img src="./icon-192.png?v=7" alt=""><span>도장 현장작업</span></div><div class="header-sub">현장 작업자용 · 하도 입력 / 상도 입력</div></header>
 <main id="appRoot">
   <div class="tabbar"><button id="tabPrimer" class="active" onclick="showMode('primer')">하도 입력</button><button id="tabTopcoat" onclick="showMode('topcoat')">상도 입력</button></div>
 
   <section id="primerSection">
-    <div class="card"><h2>환경조건</h2><div id="weatherStatus" class="muted">날씨 조회 중...</div><div class="weather-grid"><div class="weather-item"><div class="weather-title">대기온도</div><div class="weather-value"><span id="externalTemp">-</span>℃</div></div><div class="weather-item"><div class="weather-title">상대습도</div><div class="weather-value"><span id="externalHumidity">-</span>%</div></div><div class="weather-item"><div class="weather-title">이슬점온도</div><div class="weather-value"><span id="dewPoint">-</span>℃</div></div><div class="weather-item"><div class="weather-title">이슬점차이</div><div class="weather-value"><span id="tempDiff">-</span>℃</div></div></div><label>피도물 표면온도 ℃</label><input id="surfaceTemp" type="number" step="0.1" placeholder="예: 30" oninput="calculateEnvironmentJudge()"><div class="small-note">기준: 표면온도 43℃ 이하 / 이슬점보다 3℃ 이상 높아야 적합</div><div id="envJudgeBox" class="status warn">피도물 표면온도 입력 대기</div><div id="envJudgeDetail" class="small-note"></div><button class="btn-secondary" style="margin-top:10px" onclick="reloadWeather()">날씨 다시 조회</button></div>
-    <div class="card"><h2>1. 작업 정보</h2><label>작업자</label><select id="worker"></select><label>품번 검색</label><input id="partSearch" list="productList" placeholder="품번 입력 또는 선택" oninput="onPartSearch()"><datalist id="productList"></datalist><div class="row2"><div><label>품번</label><input id="partNo" readonly></div><div><label>품명</label><input id="partName" readonly></div></div><label>LOT</label><input id="lot" placeholder="LOT 입력"><div class="detail-mini" id="productDetail">품번 선택 시 도장사양이 표시됩니다.</div></div>
+    <div class="card"><h2>환경조건</h2><div id="weatherStatus" class="muted">날씨 조회 중...</div><div class="weather-grid"><div class="weather-item"><div class="weather-title">대기온도</div><div class="weather-value"><span id="externalTemp">-</span>℃</div></div><div class="weather-item"><div class="weather-title">상대습도</div><div class="weather-value"><span id="externalHumidity">-</span>%</div></div><div class="weather-item"><div class="weather-title">이슬점온도</div><div class="weather-value"><span id="dewPoint">-</span>℃</div></div><div class="weather-item"><div class="weather-title">이슬점차이</div><div class="weather-value"><span id="tempDiff">-</span>℃</div></div></div><div class="small-note">대기온도와 상대습도는 자동 조회됩니다. 피도물 표면온도는 아래 작업 정보에서 입력합니다.</div><button class="btn-secondary" style="margin-top:10px" onclick="reloadWeather()">날씨 다시 조회</button></div>
+    <div class="card"><h2>1. 작업 정보</h2><label>작업자</label><select id="worker"></select><label>품번 검색</label><input id="partSearch" list="productList" placeholder="품번 입력 또는 선택" oninput="onPartSearch()"><datalist id="productList"></datalist><div class="row2"><div><label>품번</label><input id="partNo" readonly></div><div><label>품명</label><input id="partName" readonly></div></div><label>LOT</label><input id="lot" placeholder="LOT 입력"><label>피도물 표면온도 ℃</label><input id="surfaceTemp" type="number" step="0.1" placeholder="예: 30" oninput="calculateEnvironmentJudge()"><div class="small-note">기준: 표면온도 43℃ 이하 / 이슬점보다 3℃ 이상 높아야 적합</div><div id="envJudgeBox" class="status warn">피도물 표면온도 입력 대기</div><div id="envJudgeDetail" class="small-note"></div><div class="detail-mini" id="productDetail">품번 선택 시 도장사양이 표시됩니다.</div></div>
     <div class="card"><h2>2. 하도 검사 입력</h2><label>하도 도막두께 ㎛</label><input id="primerThickness" type="number" step="0.1" placeholder="예: 18" oninput="calculatePrimerJudge()"><div class="small-note">기준: 15㎛ 이상</div><label>하도 비고</label><textarea id="primerMemo" placeholder="필요 시 입력"></textarea><div id="primerJudgeBox" class="status warn">하도 판정 대기</div><div id="primerJudgeDetail" class="small-note"></div><button class="btn-primary" style="margin-top:14px" onclick="savePrimer()">하도 저장</button><button class="btn-secondary" style="margin-top:10px" onclick="clearPrimerForm()">입력 초기화</button><div id="primerSaveStatus" class="small-note"></div></div>
   </section>
 
@@ -45,7 +45,7 @@
 const API_URL="https://script.google.com/macros/s/AKfycbxiU6pHyhoT7qWBhFq2GZyGaVwMahmwdalOXL0TjoKoY1nXH_kXDFpy4CijyZdLQqn1/exec";
 const DEFAULTS={primerMin:15,topcoatDiffMin:45,colorDiffMax:2.0,glossMin:""};
 let products=[],workers=[],weather={},selectedProduct=null,selectedTopcoatProduct=null,selectedTopcoatRow=null,busy=false,currentMode="primer";
-window.addEventListener("load",function(){if("serviceWorker" in navigator){navigator.serviceWorker.register("./service-worker.js?v=6").catch(function(){});}loadInitialData();});
+window.addEventListener("load",function(){if("serviceWorker" in navigator){navigator.serviceWorker.register("./service-worker.js?v=7").catch(function(){});}loadInitialData();});
 function apiGet(action,params){params=params||{};return new Promise(function(resolve,reject){const cb="jsonp_cb_"+Date.now()+"_"+Math.floor(Math.random()*100000);const query=new URLSearchParams();query.set("action",action);query.set("callback",cb);Object.keys(params).forEach(function(k){if(params[k]!==undefined&&params[k]!==null)query.set(k,params[k]);});const script=document.createElement("script");script.src=API_URL+"?"+query.toString();const timer=setTimeout(function(){cleanup();reject(new Error("API 응답 시간 초과"));},30000);window[cb]=function(data){cleanup();resolve(data);};script.onerror=function(){cleanup();reject(new Error("API 호출 실패"));};function cleanup(){clearTimeout(timer);delete window[cb];if(script.parentNode)script.parentNode.removeChild(script);}document.body.appendChild(script);});}
 function setBusy(v,text){busy=v;document.getElementById("appRoot").classList.toggle("loading",v);if(text){const id=currentMode==="primer"?"primerSaveStatus":"topcoatSaveStatus";const el=document.getElementById(id);if(el)el.textContent=text;}}
 function showToast(msg){const el=document.getElementById("toast");el.textContent=msg;el.style.display="block";setTimeout(function(){el.style.display="none";},4200);}

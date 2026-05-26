@@ -1,10 +1,10 @@
-const CACHE_NAME = 'paint-mobile-v6-primer-topcoat-simple';
+const CACHE_NAME = 'paint-mobile-v7-primer-topcoat-simple';
 const ASSETS = [
   './',
-  './index.html?v=6',
-  './manifest.json?v=6',
-  './icon-192.png?v=6',
-  './icon-512.png?v=6'
+  './index.html?v=7',
+  './manifest.json?v=7',
+  './icon-192.png?v=7',
+  './icon-512.png?v=7'
 ];
 
 self.addEventListener('install', event => {
