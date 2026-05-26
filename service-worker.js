@@ -1,51 +1,28 @@
-const CACHE_NAME = 'paint-mobile-v4-environment';
-
-const APP_FILES = [
+const CACHE_NAME = 'paint-mobile-v6-primer-topcoat-simple';
+const ASSETS = [
   './',
-  './index.html?v=4',
-  './manifest.json?v=4',
-  './icon-192.png?v=4',
-  './icon-512.png?v=4'
+  './index.html?v=6',
+  './manifest.json?v=6',
+  './icon-192.png?v=6',
+  './icon-512.png?v=6'
 ];
 
-self.addEventListener('install', function(event) {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(function(cache) {
-      return cache.addAll(APP_FILES).catch(function() {});
-    })
-  );
-  self.skipWaiting();
+self.addEventListener('install', event => {
+  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
 });
 
-self.addEventListener('activate', function(event) {
+self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(function(keys) {
-      return Promise.all(
-        keys.filter(function(key) { return key !== CACHE_NAME; })
-            .map(function(key) { return caches.delete(key); })
-      );
-    }).then(function() {
-      return self.clients.claim();
-    })
+    caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key)))).then(() => self.clients.claim())
   );
 });
 
-self.addEventListener('fetch', function(event) {
-  const url = new URL(event.request.url);
-
-  if (
-    url.hostname.includes('script.google.com') ||
-    url.hostname.includes('googleusercontent.com') ||
-    url.hostname.includes('drive.google.com') ||
-    url.hostname.includes('googleapis.com')
-  ) {
-    event.respondWith(fetch(event.request));
-    return;
-  }
-
-  event.respondWith(
-    fetch(event.request).catch(function() {
-      return caches.match(event.request);
-    })
-  );
+self.addEventListener('fetch', event => {
+  const request = event.request;
+  if (request.method !== 'GET') return;
+  event.respondWith(caches.match(request).then(cached => cached || fetch(request).then(response => {
+    const copy = response.clone();
+    caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
+    return response;
+  }).catch(() => cached)));
 });
