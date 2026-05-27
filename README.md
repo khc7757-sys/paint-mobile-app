@@ -6,3 +6,9 @@
 - v9: 홈 화면 아이콘 시각 크기 축소 및 여백 보정
 
 업로드 대상: GitHub `paint-mobile-app` 저장소 루트
+
+
+## v10
+- 상도 입력 시 상도 피도물 표면온도 입력 추가
+- 상도 환경판정 자동계산 및 GS 저장 연동
+- service-worker 캐시: paint-mobile-v10-topcoat-env
