@@ -22,6 +22,15 @@
     label{display:block;margin:12px 0 5px;color:#4b5563;font-size:13px;font-weight:800}input,select,textarea,button{width:100%;font-size:16px;border-radius:11px;border:1px solid #cbd5e1;padding:12px;background:#fff;color:var(--text)}input[readonly]{background:#eef2f7}textarea{min-height:76px;resize:vertical}button{border:0;font-weight:900;cursor:pointer}.btn-primary{background:var(--blue);color:#fff;padding:15px;font-size:18px}.btn-secondary{background:#e9eef3;color:var(--blue)}.btn-small{width:auto;padding:8px 10px;font-size:13px;border-radius:9px}.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.weather-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.weather-item{background:#f7f9fb;border:1px solid #e1e6eb;border-radius:13px;padding:10px;text-align:center}.weather-title{font-size:12px;color:var(--muted);margin-bottom:4px}.weather-value{font-size:18px;font-weight:900;color:var(--blue)}
     .status{padding:13px;border-radius:12px;font-weight:900;text-align:center;margin-top:12px;font-size:17px}.ok{background:var(--ok-bg);color:var(--ok);border:1px solid #b7dfc2}.ng{background:var(--ng-bg);color:var(--ng);border:1px solid #f4b9b2}.warn{background:var(--warn-bg);color:var(--warn);border:1px solid #f1cf77}.muted{color:var(--muted);font-size:13px;line-height:1.45}.small-note{color:#747f8f;font-size:12px;line-height:1.45;margin-top:5px}.detail-mini{background:#f7f9fb;border:1px solid #e1e6eb;border-radius:12px;padding:10px;margin-top:10px;font-size:13px;color:#444;line-height:1.7}.hidden{display:none!important}.loading{opacity:.64;pointer-events:none}
     .tabbar{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}.tabbar button{padding:13px;font-size:15px}.tabbar button.active{background:var(--blue);color:#fff}.target-list{display:grid;gap:8px;margin-top:10px}.target-card{border:1px solid #d8e0ea;border-radius:13px;background:#fff;padding:10px}.target-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.target-title{font-weight:900;color:#0f3c68}.target-meta{font-size:12px;color:#667085;line-height:1.5;margin-top:4px}.toast{position:fixed;left:12px;right:12px;bottom:18px;z-index:50;background:#111827;color:#fff;padding:13px 14px;border-radius:13px;font-size:14px;line-height:1.45;box-shadow:0 10px 24px rgba(0,0,0,.26);display:none}.bottom-bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(255,255,255,.96);border-top:1px solid #d8e0ea;padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr;gap:10px}.bottom-bar button{padding:14px 10px}@media(max-width:380px){.row2,.weather-grid{grid-template-columns:1fr}}
+
+    .history-list{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+    .history-card{border:1px solid #d8e0ea;border-radius:12px;background:#fff;padding:10px}
+    .history-card .history-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+    .history-receipt{font-size:12px;color:#174a7c;font-weight:900;word-break:break-all}
+    .history-status{font-size:12px;font-weight:900;border-radius:999px;padding:4px 8px;background:#e9eef3;color:#174a7c;white-space:nowrap}
+    .history-meta{margin-top:6px;font-size:12px;color:#4b5563;line-height:1.45}
+    .history-judge{font-weight:900}
+
   </style>
 </head>
 <body>
@@ -37,6 +46,7 @@
 
   <section id="topcoatSection" class="hidden">
     <div class="card"><h2>상도 입력 대상 검색</h2><label>품번 검색</label><input id="targetPartFilter" placeholder="품번 일부 입력"><button class="btn-primary" style="margin-top:12px" onclick="loadTopcoatTargets()">입력대기 검색</button><div id="targetList" class="target-list"><div class="muted">입력대기 검색을 누르면 상도 입력 대상이 표시됩니다.</div></div></div>
+    <div class="card"><h2>작업이력 확인</h2><label>품번 검색</label><input id="historyPartFilter" placeholder="품번 일부 입력"><label>작업상태</label><select id="historyWorkStatus"><option value="">전체</option><option value="상도 입력 대상">상도 입력 대상</option><option value="상도 완료">상도 완료</option></select><button class="btn-primary" style="margin-top:12px" onclick="loadMobileHistory()">작업이력 조회</button><div id="mobileHistoryList" class="history-list"><div class="muted">작업이력 조회를 누르면 접수번호/일자/품번/품명/판정/작업상태만 표시됩니다.</div></div></div>
     <div class="card"><h2>상도 검사 입력</h2><label>선택한 접수번호</label><input id="topcoatReceiptNo" readonly placeholder="위 목록에서 선택"><div class="row2"><div><label>품번</label><input id="topcoatPartNo" readonly></div><div><label>하도두께 ㎛</label><input id="loadedPrimerThickness" readonly></div></div>
       <h3>상도 환경조건</h3><div id="topcoatWeatherStatus" class="muted">상도 날씨 조회 대기</div><div class="weather-grid"><div class="weather-item"><div class="weather-title">상도 대기온도</div><div class="weather-value"><span id="topcoatExternalTemp">-</span>℃</div></div><div class="weather-item"><div class="weather-title">상도 상대습도</div><div class="weather-value"><span id="topcoatExternalHumidity">-</span>%</div></div><div class="weather-item"><div class="weather-title">상도 이슬점온도</div><div class="weather-value"><span id="topcoatDewPoint">-</span>℃</div></div><div class="weather-item"><div class="weather-title">상도 이슬점차이</div><div class="weather-value"><span id="topcoatTempDiff">-</span>℃</div></div></div><label>상도 피도물 표면온도 ℃</label><input id="topcoatSurfaceTemp" type="number" step="0.1" placeholder="예: 30" oninput="calculateTopcoatEnvironmentJudge();calculateTopcoatJudge();"><div class="small-note">기준: 표면온도 43℃ 이하 / 이슬점보다 3℃ 이상 높아야 적합</div><div id="topcoatEnvJudgeBox" class="status warn">상도 피도물 표면온도 입력 대기</div><div id="topcoatEnvJudgeDetail" class="small-note"></div><button class="btn-secondary" style="margin-top:10px" onclick="reloadWeather()">상도 날씨 다시 조회</button>
       <label>총두께 ㎛</label><input id="totalThickness" type="number" step="0.1" placeholder="예: 65" oninput="calculateTopcoatJudge()"><label>상도두께 자동계산 ㎛</label><input id="topcoatThickness" readonly><label>색차 ΔE</label><input id="colorDiff" type="number" step="0.01" placeholder="예: 1.5" oninput="calculateTopcoatJudge()"><div id="glossInputBox" class="hidden"><label>광택값</label><input id="glossValue" type="number" step="0.1" placeholder="유광/반광 품번만 입력" oninput="calculateTopcoatJudge()"></div><label>상도 비고</label><textarea id="topcoatMemo" placeholder="필요 시 입력"></textarea><div id="topcoatJudgeBox" class="status warn">상도 판정 대기</div><div id="topcoatJudgeDetail" class="small-note"></div><button class="btn-primary" style="margin-top:14px" onclick="saveTopcoat()">상도 저장</button><button class="btn-secondary" style="margin-top:10px" onclick="clearTopcoatForm()">상도 입력 초기화</button><div id="topcoatSaveStatus" class="small-note"></div></div>
@@ -54,7 +64,7 @@ function showToast(msg){const el=document.getElementById("toast");el.textContent
 function showMode(mode){currentMode=mode;document.getElementById("primerSection").classList.toggle("hidden",mode!=="primer");document.getElementById("topcoatSection").classList.toggle("hidden",mode!=="topcoat");document.getElementById("tabPrimer").classList.toggle("active",mode==="primer");document.getElementById("tabTopcoat").classList.toggle("active",mode==="topcoat");document.getElementById("bottomMainBtn").textContent=mode==="primer"?"하도 저장":"상도 저장";}
 function bottomAction(){if(currentMode==="primer")savePrimer();else saveTopcoat();}
 function loadInitialData(){setBusy(true,"");apiGet("getInitialData").then(function(data){products=data.products||[];workers=data.workers||[];weather=data.weather||{};renderWorkers();renderProducts();renderWeather();}).catch(function(err){showToast("초기 데이터 조회 실패: "+err.message);}).finally(function(){setBusy(false,"");});}
-function reloadAll(){if(currentMode==="topcoat")loadTopcoatTargets();loadInitialData();}
+function reloadAll(){if(currentMode==="topcoat"){loadTopcoatTargets();loadMobileHistory();}loadInitialData();}
 function renderWorkers(){const el=document.getElementById("worker");el.innerHTML='<option value="">작업자 선택</option>';workers.forEach(function(w){const opt=document.createElement("option");opt.value=w.name;opt.textContent=w.name;el.appendChild(opt);});}
 function renderProducts(){const list=document.getElementById("productList");list.innerHTML="";products.forEach(function(p){const opt=document.createElement("option");opt.value=p.partNo;opt.label=(p.partName||"")+" / "+(p.topcoatSpec||"");list.appendChild(opt);});}
 function onPartSearch(){const key=document.getElementById("partSearch").value.trim();const p=products.find(function(x){return x.partNo===key;});if(!p){selectedProduct=null;clearProductFields();calculatePrimerJudge();return;}selectedProduct=p;applyProduct(p);}
@@ -68,6 +78,70 @@ function savePrimer(){if(busy)return;if(!selectedProduct){showToast("제품목�
 function clearPrimerForm(keepWorker){document.getElementById("partSearch").value="";selectedProduct=null;clearProductFields();["lot","surfaceTemp","primerThickness","primerMemo"].forEach(function(id){document.getElementById(id).value="";});if(!keepWorker)document.getElementById("worker").value="";calculateEnvironmentJudge();calculatePrimerJudge();}
 function loadTopcoatTargets(){const list=document.getElementById("targetList");list.innerHTML='<div class="muted">상도 입력 대상 조회 중...</div>';const partNo=document.getElementById("targetPartFilter").value.trim();apiGet("getPaintWorkHistory",{workStatus:"상도 입력 대상",partNo:partNo}).then(function(rows){renderTopcoatTargets(rows||[]);}).catch(function(err){list.innerHTML='<div class="muted">조회 실패: '+escapeHtml(err.message)+'</div>';});}
 function renderTopcoatTargets(rows){const list=document.getElementById("targetList");list.innerHTML="";if(!rows.length){list.innerHTML='<div class="muted">상도 입력 대상이 없습니다.</div>';return;}rows.forEach(function(r){const card=document.createElement("div");card.className="target-card";const receipt=safeText(r["접수번호"]);card.innerHTML='<div class="target-top"><div><div class="target-title">'+escapeHtml(safeText(r["품번"]))+'</div><div class="target-meta">'+escapeHtml(safeText(r["품명"]))+'<br>LOT: '+escapeHtml(safeText(r["LOT"]))+' / 하도: '+escapeHtml(safeText(r["하도두께"]))+'㎛<br>'+escapeHtml(receipt)+'</div></div><button class="btn-primary btn-small" type="button">입력</button></div>';card.querySelector("button").onclick=function(){selectTopcoatTarget(r);};list.appendChild(card);});}
+
+function loadMobileHistory(){
+  const list=document.getElementById("mobileHistoryList");
+  if(!list)return;
+  list.innerHTML='<div class="muted">작업이력 조회 중...</div>';
+  const partNo=(document.getElementById("historyPartFilter")?document.getElementById("historyPartFilter").value.trim():"");
+  const workStatus=(document.getElementById("historyWorkStatus")?document.getElementById("historyWorkStatus").value:"");
+  apiGet("getInspectionList",{partNo:partNo,finalJudge:""}).then(function(rows){
+    let displayRows=rows||[];
+    if(workStatus){
+      displayRows=displayRows.filter(function(r){return normalizeWorkStatus(r)===workStatus;});
+    }
+    renderMobileHistory(displayRows);
+  }).catch(function(err){
+    list.innerHTML='<div class="muted">작업이력 조회 실패: '+escapeHtml(err.message)+'</div>';
+  });
+}
+function renderMobileHistory(rows){
+  const list=document.getElementById("mobileHistoryList");
+  if(!list)return;
+  list.innerHTML="";
+  if(!rows.length){
+    list.innerHTML='<div class="muted">조회 결과가 없습니다.</div>';
+    return;
+  }
+  rows.slice(0,100).forEach(function(r){
+    const card=document.createElement("div");
+    card.className="history-card";
+    const status=normalizeWorkStatus(r);
+    const receipt=safeText(r["접수번호"]);
+    const date=safeText(r["점검일자"]||r["작업일자"]);
+    const partNo=safeText(r["품번"]);
+    const partName=safeText(r["품명"]);
+    const judge=safeText(r["최종판정"]||r["판정"]);
+    card.innerHTML=
+      '<div class="history-top"><div class="history-receipt">'+escapeHtml(receipt)+'</div><div class="history-status">'+escapeHtml(status||"-")+'</div></div>'+
+      '<div class="history-meta">'+
+      '<b>일자:</b> '+escapeHtml(date)+'<br>'+
+      '<b>품번:</b> '+escapeHtml(partNo)+'<br>'+
+      '<b>품명:</b> '+escapeHtml(partName)+'<br>'+
+      '<b>판정:</b> <span class="history-judge">'+escapeHtml(judge)+'</span>'+
+      '</div>';
+    card.onclick=function(){
+      if(isTopcoatTarget(r)){
+        selectTopcoatTarget(r);
+      }
+    };
+    list.appendChild(card);
+  });
+}
+function normalizeWorkStatus(r){
+  r=r||{};
+  const status=String(r["작업상태"]||"").trim();
+  const primer=String(r["하도두께"]||"").trim();
+  const total=String(r["총두께"]||"").trim();
+  const topcoat=String(r["상도두께"]||"").trim();
+  const colorDiff=String(r["색차"]||"").trim();
+  const topcoatSavedAt=String(r["상도저장일시"]||"").trim();
+  if(topcoatSavedAt||total||topcoat||colorDiff||status==="상도 완료"||status==="작업완료")return"상도 완료";
+  if(status==="상도 입력 대상"||status==="상도 대기"||status==="건조 대기")return"상도 입력 대상";
+  if(primer&&!total&&!topcoat)return"상도 입력 대상";
+  return status||String(r["조치상태"]||"").trim();
+}
+
 function selectTopcoatTarget(r){selectedTopcoatRow=r;const partNo=String(r["품번"]||"").trim();selectedTopcoatProduct=products.find(function(p){return p.partNo===partNo;})||null;document.getElementById("topcoatReceiptNo").value=r["접수번호"]||"";document.getElementById("topcoatPartNo").value=partNo;document.getElementById("loadedPrimerThickness").value=r["하도두께"]||"";document.getElementById("totalThickness").value="";document.getElementById("topcoatThickness").value="";document.getElementById("colorDiff").value="";document.getElementById("glossValue").value="";document.getElementById("topcoatMemo").value="";if(document.getElementById("topcoatSurfaceTemp"))document.getElementById("topcoatSurfaceTemp").value="";updateTopcoatWeatherDisplay();calculateTopcoatEnvironmentJudge();const glossTarget=selectedTopcoatProduct?isGlossTarget(selectedTopcoatProduct.glossType):isGlossTarget(r["광택구분"]);document.getElementById("glossInputBox").classList.toggle("hidden",!glossTarget);calculateTopcoatJudge();document.getElementById("topcoatReceiptNo").scrollIntoView({behavior:"smooth",block:"center"});}
 function updateTopcoatWeatherDisplay(){if(document.getElementById("topcoatExternalTemp"))document.getElementById("topcoatExternalTemp").textContent=safeText(weather.externalTemp);if(document.getElementById("topcoatExternalHumidity"))document.getElementById("topcoatExternalHumidity").textContent=safeText(weather.externalHumidity);if(document.getElementById("topcoatDewPoint"))document.getElementById("topcoatDewPoint").textContent=safeText(weather.dewPoint);const s=document.getElementById("topcoatWeatherStatus");if(s)s.textContent=weather.success?"상도 날씨 기준시간: "+(weather.weatherTime||"-")+" / 화면갱신: "+new Date().toLocaleTimeString("ko-KR"):"상도 날씨 조회 실패: "+(weather.message||"");}
 function calculateTopcoatEnvironmentJudge(){const input=document.getElementById("topcoatSurfaceTemp");const st=toNumber(input?input.value:"");const dp=toNumber(weather.dewPoint);const box=document.getElementById("topcoatEnvJudgeBox");const detail=document.getElementById("topcoatEnvJudgeDetail");const diffEl=document.getElementById("topcoatTempDiff");if(!box||!detail||!diffEl)return"판정불가";box.className="status";if(st===""||dp===""){diffEl.textContent="-";box.classList.add("warn");box.textContent="상도 피도물 표면온도 입력 대기";detail.textContent="상도 피도물 표면온도를 입력하면 환경판정이 자동 계산됩니다.";return"판정불가";}const diff=round1(st-dp);diffEl.textContent=diff;const reasons=[];if(st>43)reasons.push("상도 피도물 표면온도 43℃ 초과");if(diff<3)reasons.push("상도 피도물 표면온도와 이슬점온도 차이 3℃ 미만");if(!reasons.length){box.classList.add("ok");box.textContent="상도 환경판정: 적합";detail.textContent="상도 피도물 표면온도 43℃ 이하 / 이슬점 대비 3℃ 이상";return"적합";}box.classList.add("ng");box.textContent="상도 환경판정: 부적합";detail.textContent=reasons.join(", ");return"부적합";}

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'paint-mobile-v10-topcoat-env';
+const CACHE_NAME = 'paint-mobile-v11-simple-history';
 const ASSETS = [
   './',
   './index.html',
